@@ -68,6 +68,18 @@ const config: Config = {
         },
       },
     ],
+    [
+      "docusaurus-plugin-llms",
+      {
+        generateLLMsTxt: true,
+        generateLLMsFullTxt: true,
+        title: "Hey Bible Documentation",
+        description: "Documentation for Hey Bible - a modern Bible verse lookup tool. Includes API reference, Node.js client, and MCP server guides.",
+        pathTransformation: {
+          ignorePaths: ["docs"],
+        },
+      },
+    ],
   ],
 
   themeConfig: {

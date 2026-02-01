@@ -1,4 +1,4 @@
 node_modules
 .docusaurus
-.build
+build
 .DS_Store
