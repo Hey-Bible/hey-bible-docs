@@ -1,0 +1,105 @@
+---
+sidebar_position: 3
+sidebar_label: MCP Server
+title: MCP Server
+---
+
+# MCP Server
+
+The Hey Bible MCP server lets you access your saved verses, notes, and images directly from AI assistants like Claude Desktop.
+
+[![npm version](https://img.shields.io/npm/v/@hey-bible/mcp.svg)](https://www.npmjs.com/package/@hey-bible/mcp)
+
+## What is MCP?
+
+[Model Context Protocol (MCP)](https://modelcontextprotocol.io) is an open standard that allows AI assistants to connect to external data sources and tools. The Hey Bible MCP server exposes your Hey Bible data as tools that Claude can use to answer questions about your saved verses and notes.
+
+## Installation
+
+```bash
+npm install -g @hey-bible/mcp
+```
+
+## Usage with Claude Desktop
+
+Add the following to your Claude Desktop configuration file:
+
+- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "hey-bible": {
+      "command": "npx",
+      "args": ["-y", "@hey-bible/mcp"],
+      "env": {
+        "HEY_BIBLE_API_KEY": "your_api_key_here"
+      }
+    }
+  }
+}
+```
+
+Then restart Claude Desktop. You should see Hey Bible listed in the connectors menu.
+
+## Available Tools
+
+### get_verses
+
+Retrieve your saved Bible verses with their content, associated notes, and images.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | `number` | Optional. Specific verse ID to retrieve |
+| `limit` | `number` | Optional. Number of verses to return (1-100) |
+| `offset` | `number` | Optional. Number of verses to skip for pagination |
+
+### get_notes
+
+Retrieve your notes associated with Bible verses.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | `number` | Optional. Specific note ID to retrieve |
+| `limit` | `number` | Optional. Number of notes to return (1-100) |
+| `offset` | `number` | Optional. Number of notes to skip for pagination |
+
+### get_images
+
+Retrieve AI-generated images associated with your verses.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | `number` | Optional. Specific image ID (returns signed URL with 24hr expiry) |
+| `limit` | `number` | Optional. Number of images to return (1-100) |
+| `offset` | `number` | Optional. Number of images to skip for pagination |
+
+## Example Prompts
+
+Once configured, you can ask Claude things like:
+
+- "Show me my saved verses"
+- "What notes have I written recently?"
+- "Find my verses from the book of Psalms"
+- "How many images have I generated?"
+
+## Troubleshooting
+
+### Server not appearing in Claude Desktop
+
+1. Verify your `claude_desktop_config.json` syntax is valid JSON
+2. Ensure your API key is correct
+3. Fully quit and restart Claude Desktop (not just close the window)
+
+### Tools returning errors
+
+1. Check that your API key is valid and not expired
+2. Verify you have saved verses/notes/images in your Hey Bible account
+
+### View server logs
+
+On macOS, check the logs at:
+```
+~/Library/Logs/Claude/mcp-server-hey-bible.log
+```
