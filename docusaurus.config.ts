@@ -115,12 +115,16 @@ const config: Config = {
           title: "Follow Us",
           items: [
             {
+              label: "GitHub",
+              href: "https://github.com/Hey-Bible",
+            },
+            {
               label: "Instagram",
-              href: "https://www.instagram.com/heybible",
+              href: "https://www.instagram.com/heybibleapp",
             },
             {
               label: "X",
-              href: "https://x.com/heybible",
+              href: "https://x.com/heybibleapp",
             },
           ],
         },
