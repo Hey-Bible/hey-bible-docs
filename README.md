@@ -1,0 +1,3 @@
+# hey-bible-docs
+
+Let there be light 🌅
