@@ -1,0 +1,31 @@
+---
+sidebar_position: 1
+sidebar_label: Generating API Keys
+title: Generating API Keys
+---
+
+# Generating API Keys
+
+To use the Hey Bible API, you'll need to generate an API key from your account settings.
+
+## Steps
+
+1. Log in to [Hey Bible](https://heybible.app)
+2. Navigate to the **Account** page
+3. Under the "API Keys" section, click the **+** button to create a new key
+4. Click **Copy** to copy the API key to your clipboard
+
+## Using Your API Key
+
+Include your API key in the `X-Hey-Bible-Api-Key` header when making requests:
+
+```bash
+curl -X GET "https://api.heybible.app/verses" \
+  -H "X-Hey-Bible-Api-Key: YOUR_API_KEY"
+```
+
+## Security Tips
+
+- Keep your API key secret - don't commit it to version control
+- Use environment variables to store your API key
+- Regenerate your key if you suspect it has been compromised

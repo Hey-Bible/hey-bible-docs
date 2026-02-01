@@ -1,0 +1,123 @@
+---
+sidebar_position: 2
+sidebar_label: Node.js Client
+title: Node.js Client
+---
+
+# Node.js Client
+
+The official Node.js client for the Hey Bible API provides a type-safe way to interact with the API from your JavaScript or TypeScript applications.
+
+[![npm version](https://img.shields.io/npm/v/@hey-bible/client.svg)](https://www.npmjs.com/package/@hey-bible/client)
+
+## Installation
+
+```bash
+npm install @hey-bible/client
+```
+
+## Quick Start
+
+```typescript
+import { Configuration, HeyBibleApi } from '@hey-bible/client';
+
+const config = new Configuration({
+  apiKey: process.env.HEY_BIBLE_API_KEY,
+});
+
+const api = new HeyBibleApi(config);
+```
+
+## Usage
+
+### Get Verses
+
+Retrieve your saved verses:
+
+```typescript
+// Get all verses (paginated)
+const verses = await api.versesGet({});
+console.log(verses);
+
+// Get a specific verse by ID
+const verse = await api.versesGet({ id: 123 });
+
+// Paginate through verses
+const page = await api.versesGet({ limit: 10, offset: 20 });
+```
+
+### Get Notes
+
+Retrieve your notes with their associated verses:
+
+```typescript
+// Get all notes
+const notes = await api.notesGet({});
+
+// Get a specific note by ID
+const note = await api.notesGet({ id: 456 });
+
+// Paginate through notes
+const page = await api.notesGet({ limit: 10, offset: 0 });
+```
+
+### Get Images
+
+Retrieve your saved images:
+
+```typescript
+// Get all images
+const images = await api.imagesGet({});
+
+// Get a specific image by ID (returns signed URL)
+const image = await api.imagesGet({ id: 789 });
+
+// Paginate through images
+const page = await api.imagesGet({ limit: 10, offset: 0 });
+```
+
+## Configuration Options
+
+The `Configuration` class accepts the following options:
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `apiKey` | `string` | Your Hey Bible API key |
+| `basePath` | `string` | Override the API base URL (default: `https://api.heybible.app`) |
+| `headers` | `object` | Additional headers to include in requests |
+
+## Error Handling
+
+The client throws a `ResponseError` when the API returns an error response:
+
+```typescript
+import { ResponseError } from '@hey-bible/client';
+
+try {
+  const verses = await api.versesGet({});
+} catch (error) {
+  if (error instanceof ResponseError) {
+    console.error('API Error:', error.response.status);
+  }
+}
+```
+
+## TypeScript Support
+
+The client is written in TypeScript and includes full type definitions. All response types are automatically inferred:
+
+```typescript
+import { HeyBibleApi, VersesGet200Response } from '@hey-bible/client';
+
+const verses: VersesGet200Response = await api.versesGet({});
+```
+
+## Environment Support
+
+The client works in the following environments:
+
+- Node.js
+- Webpack
+- Browserify
+- ES5+ (with a Promises/A+ library)
+- ES6+
