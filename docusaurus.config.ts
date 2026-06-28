@@ -6,7 +6,7 @@ import type * as Preset from "@docusaurus/preset-classic";
 
 const config: Config = {
   title: "Hey Bible",
-  tagline: "Explore scripture with AI-powered insights",
+  tagline: "The one-stop gateway for giving AI agents access to the Bible",
   favicon: "img/favicon.png",
 
   // Set the production url of your site here
@@ -74,7 +74,7 @@ const config: Config = {
         generateLLMsTxt: true,
         generateLLMsFullTxt: true,
         title: "Hey Bible Documentation",
-        description: "Documentation for Hey Bible - a modern Bible verse lookup tool. Includes API reference, Node.js client, and MCP server guides.",
+        description: "Documentation for Hey Bible - the one-stop gateway for giving AI agents access to the Bible. Includes the REST API reference, Node.js client, CLI, MCP server, and agent skill guides.",
         pathTransformation: {
           ignorePaths: ["docs"],
         },

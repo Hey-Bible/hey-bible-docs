@@ -1,0 +1,103 @@
+---
+sidebar_position: 4
+sidebar_label: CLI
+title: CLI
+description: Use the @hey-bible/cli command-line interface to look up Scripture and access your Hey Bible data from the terminal, scripts, and AI agents.
+---
+
+# CLI
+
+The Hey Bible CLI brings Scripture to your terminal, your scripts, and your AI
+agents. It's a thin wrapper over the [Node.js client](/developers/nodejs-client),
+and every command supports `--json` for clean, machine-readable output.
+
+[![npm version](https://img.shields.io/npm/v/@hey-bible/cli.svg)](https://www.npmjs.com/package/@hey-bible/cli)
+
+## Installation
+
+```bash
+npm install -g @hey-bible/cli
+```
+
+Or run it on demand with `npx` (no install required):
+
+```bash
+npx -y @hey-bible/cli search John 3
+```
+
+## Configuration
+
+Set your API key as an environment variable (or pass `--api-key` per command):
+
+```bash
+export HEY_BIBLE_API_KEY=your_api_key_here
+```
+
+See [Generating API Keys](/developers/generating-api-keys) to create one.
+
+| Variable | Description |
+|----------|-------------|
+| `HEY_BIBLE_API_KEY` | Your API key (required). |
+| `HEY_BIBLE_API_URL` | Override the API base URL (default: `https://api.heybible.app`). |
+
+## Usage
+
+```bash
+# Look up a verse range (defaults to ESV)
+hey-bible search John 3 --start-verse 16 --end-verse 18
+
+# Look up a whole chapter in a specific translation
+hey-bible bibles
+hey-bible search Psalms 23 --bible-id kjv
+
+# List the books of the Bible
+hey-bible books
+
+# Get raw JSON (recommended for scripts and AI agents)
+hey-bible search "1 Corinthians" 13 --json
+```
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `bibles` | List available Bible translations. |
+| `books` | List the 66 books with their 3-letter codes and chapter counts. |
+| `search <book> <chapter>` | Look up verses. Saves the lookup to your account. |
+| `favorites` | List favorited verses with notes, images, conversations, and tags. |
+| `notes` | List your verse notes. |
+| `images` | List AI-generated verse images (use `--id` for a signed URL). |
+| `chats` | List chat conversations with verse context. |
+| `tags` | List the tags you use to organize favorites. |
+
+### `search` options
+
+| Flag | Description |
+|------|-------------|
+| `-s, --start-verse <n>` | Starting verse number. |
+| `-e, --end-verse <n>` | Ending verse number. |
+| `-b, --bible-id <id>` | Translation ID (defaults to ESV; see `hey-bible bibles`). |
+
+### Global options
+
+| Flag | Description |
+|------|-------------|
+| `--json` | Output raw JSON (recommended for scripts and AI agents). |
+| `--api-key <key>` | API key (or set `HEY_BIBLE_API_KEY`). |
+| `--api-url <url>` | Override the API base URL (or set `HEY_BIBLE_API_URL`). |
+| `-v, --version` | Print the version. |
+| `-h, --help` | Show help for any command. |
+
+The list commands (`favorites`, `notes`, `images`, `chats`) accept
+`-l, --limit <n>` and `-o, --offset <n>` for pagination, and
+`notes`/`images`/`chats` accept `-i, --id` to fetch a single record.
+
+## Use with AI agents
+
+Because every command emits structured JSON with `--json`, the CLI is an easy way
+to give an AI agent access to Scripture. For OpenClaw-compatible agents, install
+the [Agent Skill](/developers/agent-skill), which wraps this CLI.
+
+```bash
+npx -y @hey-bible/cli search John 3 --json
+```

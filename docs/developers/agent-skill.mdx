@@ -1,0 +1,67 @@
+---
+sidebar_position: 5
+sidebar_label: Agent Skill
+title: Agent Skill
+description: Install the hey-bible Agent Skill from ClawHub to give OpenClaw-compatible AI agents first-class access to the Bible.
+---
+
+# Agent Skill
+
+The `hey-bible` Agent Skill gives any [OpenClaw](https://openclaw.ai)-compatible
+AI agent first-class access to Scripture — no glue code required. It's published
+to [ClawHub](https://clawhub.ai), the skill registry for AI agents, and wraps the
+[Hey Bible CLI](/developers/cli) under the hood.
+
+## Installation
+
+```bash
+clawhub install hey-bible
+```
+
+The skill declares the `@hey-bible/cli` package as its dependency, so a
+compatible agent runtime will install everything it needs automatically.
+
+## Configuration
+
+The skill requires a Hey Bible API key, exposed as an environment variable:
+
+```bash
+export HEY_BIBLE_API_KEY=your_api_key_here
+```
+
+See [Generating API Keys](/developers/generating-api-keys) to create one.
+
+## What the agent can do
+
+Once installed, your agent can:
+
+- Look up any verse or chapter across multiple translations
+- Browse the books of the Bible (names, codes, chapter counts)
+- List available Bible translations
+- Read the user's favorites, notes, AI-generated verse images, chats, and tags
+
+All responses are structured JSON, so the agent can parse and reason over them
+directly.
+
+## Example prompts
+
+Once the skill is installed, you can ask your agent things like:
+
+- "What does John 3:16 say?"
+- "Read me Psalm 23 in the KJV."
+- "Pull up my favorite verses tagged 'faith'."
+- "Summarize 1 Corinthians 13."
+
+## How it fits together
+
+The Agent Skill is the highest-level entry point in the Hey Bible developer
+platform. From most to least abstracted:
+
+- **Agent Skill** (this page) — install and go for OpenClaw agents.
+- **[MCP Server](/developers/mcp-server)** — for MCP-native clients like Claude Desktop.
+- **[CLI](/developers/cli)** — for terminals, scripts, and automation.
+- **[Node.js Client](/developers/nodejs-client)** — a typed SDK for custom integrations.
+- **[API Reference](/api)** — the REST API underneath it all.
+
+They all talk to the same API and authenticate with the same key — pick whichever
+fits your stack.

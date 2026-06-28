@@ -31,20 +31,32 @@ const api = new HeyBibleApi(config);
 
 ## Usage
 
-### Get Verses
+### Search Verses
 
-Retrieve your saved verses:
+Look up verses by book and chapter (saves the lookup to your account):
 
 ```typescript
-// Get all verses (paginated)
-const verses = await api.versesGet({});
-console.log(verses);
+// Look up a verse range (defaults to ESV)
+const result = await api.searchGet({
+  book: 'John',
+  chapter: 3,
+  startVerse: 16,
+  endVerse: 18,
+});
+console.log(result.verse);
 
-// Get a specific verse by ID
-const verse = await api.versesGet({ id: 123 });
+// Look up a whole chapter in a specific translation
+const psalm = await api.searchGet({ book: 'Psalms', chapter: 23, bibleId: 'kjv' });
+```
 
-// Paginate through verses
-const page = await api.versesGet({ limit: 10, offset: 20 });
+### List Bibles and Books
+
+```typescript
+// Available translations
+const bibles = await api.biblesGet();
+
+// The 66 books with codes and chapter counts
+const books = await api.booksGet();
 ```
 
 ### Get Notes
@@ -95,7 +107,7 @@ The client throws a `ResponseError` when the API returns an error response:
 import { ResponseError } from '@hey-bible/client';
 
 try {
-  const verses = await api.versesGet({});
+  const result = await api.searchGet({ book: 'John', chapter: 3 });
 } catch (error) {
   if (error instanceof ResponseError) {
     console.error('API Error:', error.response.status);
@@ -108,9 +120,9 @@ try {
 The client is written in TypeScript and includes full type definitions. All response types are automatically inferred:
 
 ```typescript
-import { HeyBibleApi, VersesGet200Response } from '@hey-bible/client';
+import { HeyBibleApi, SearchGet200Response } from '@hey-bible/client';
 
-const verses: VersesGet200Response = await api.versesGet({});
+const result: SearchGet200Response = await api.searchGet({ book: 'John', chapter: 3 });
 ```
 
 ## Environment Support

@@ -7,7 +7,7 @@ description: Use the @hey-bible/mcp server to access your Hey Bible data from AI
 
 # MCP Server
 
-The Hey Bible MCP server lets you access your saved verses, notes, and images directly from AI assistants like Claude Desktop.
+The Hey Bible MCP server lets AI assistants like Claude Desktop look up Scripture and access your Hey Bible data — verses, favorites, notes, images, chats, and tags — directly from your conversations.
 
 [![npm version](https://img.shields.io/npm/v/@hey-bible/mcp.svg)](https://www.npmjs.com/package/@hey-bible/mcp)
 
@@ -46,15 +46,35 @@ Then restart Claude Desktop. You should see Hey Bible listed in the connectors m
 
 ## Available Tools
 
-### get_verses
+### search_verses
 
-Retrieve your saved Bible verses with their content, associated notes, and images.
+Look up Bible verses by book and chapter. Saves the result to your account. If `start_verse` and `end_verse` are omitted, returns the full chapter.
 
 | Parameter | Type | Description |
 |-----------|------|-------------|
-| `id` | `number` | Optional. Specific verse ID to retrieve |
-| `limit` | `number` | Optional. Number of verses to return (1-100) |
-| `offset` | `number` | Optional. Number of verses to skip for pagination |
+| `book` | `string` | Required. Book name (e.g. "John", "Genesis", "1 Corinthians") |
+| `chapter` | `number` | Required. Chapter number |
+| `start_verse` | `number` | Optional. Starting verse number |
+| `end_verse` | `number` | Optional. Ending verse number |
+| `bible_id` | `string` | Optional. Translation ID (defaults to ESV) |
+
+### get_bibles
+
+List the available Bible translations (id, name, abbreviation, source). Takes no parameters.
+
+### get_books
+
+List the 66 books of the Bible with their 3-letter codes and chapter counts. Takes no parameters.
+
+### get_favorites
+
+Retrieve your favorited verses with their notes, images, conversations, and tags.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `tag` | `string` | Optional. Filter favorites by tag name |
+| `limit` | `number` | Optional. Number of favorites to return (1-100) |
+| `offset` | `number` | Optional. Number of favorites to skip for pagination |
 
 ### get_notes
 
@@ -76,14 +96,28 @@ Retrieve AI-generated images associated with your verses.
 | `limit` | `number` | Optional. Number of images to return (1-100) |
 | `offset` | `number` | Optional. Number of images to skip for pagination |
 
+### get_chats
+
+Retrieve your chat conversations with verse context. If `id` is provided, returns a single chat with its messages.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `id` | `string` | Optional. Specific chat ID (UUID) to retrieve with messages |
+| `limit` | `number` | Optional. Number of chats to return (1-100) |
+| `offset` | `number` | Optional. Number of chats to skip for pagination |
+
+### get_tags
+
+List all the tags you've defined. Tags can be used to filter favorites. Takes no parameters.
+
 ## Example Prompts
 
 Once configured, you can ask Claude things like:
 
-- "Show me my saved verses"
+- "What does John 3:16 say?"
+- "Read me Psalm 23 in the KJV"
+- "Show me my favorite verses tagged 'faith'"
 - "What notes have I written recently?"
-- "Find my verses from the book of Psalms"
-- "How many images have I generated?"
 
 ## Troubleshooting
 
