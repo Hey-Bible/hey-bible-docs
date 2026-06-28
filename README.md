@@ -1,3 +1,7 @@
+<p align="center">
+  <img alt="Hey Bible" src="static/img/og-image.png" width="1200" />
+</p>
+
 # Website
 
 This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
