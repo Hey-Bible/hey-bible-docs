@@ -11,7 +11,9 @@ const sidebars: SidebarsConfig = {
       items: [
         'developers/generating-api-keys',
         'developers/nodejs-client',
+        'developers/cli',
         'developers/mcp-server',
+        'developers/agent-skill',
         {
           type: 'link',
           label: 'API Reference',
