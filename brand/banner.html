@@ -1,0 +1,144 @@
+<!doctype html>
+<!--
+  Source for docs/img/banner.png, the 1500×500 banner at the top of the
+  introduction page: the logo lockup and the sheep on a sticker card. The card's
+  white edge and shadow are part of the picture, on a transparent ground, so it
+  sits on the cream page by day and on the night sky in dark mode.
+
+  To regenerate it, run this from the repository root (adjust the path to
+  Chrome for your system):
+
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+      --headless=new --hide-scrollbars --window-size=1500,500 \
+      --default-background-color=00000000 \
+      --screenshot=docs/img/banner.png "file://$PWD/brand/banner.html"
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Hey Bible docs banner</title>
+    <style>
+      @font-face {
+        font-family: 'Fredoka';
+        font-weight: 300 700;
+        src: url('../static/fonts/fredoka-variable-latin.woff2') format('woff2');
+      }
+
+      @font-face {
+        font-family: 'Nunito';
+        font-weight: 200 1000;
+        src: url('../static/fonts/nunito-variable-latin.woff2') format('woff2');
+      }
+
+      html,
+      body {
+        margin: 0;
+      }
+
+      .frame {
+        box-sizing: border-box;
+        width: 1500px;
+        height: 500px;
+        padding: 22px 46px 62px;
+      }
+
+      /* A sticker card: pale fill, white edge, soft warm shadow */
+      .card {
+        box-sizing: border-box;
+        height: 100%;
+        padding: 0 110px 0 120px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border: 9px solid #fff;
+        border-radius: 48px;
+        background: #fbf4e6;
+        box-shadow: 0 18px 36px rgba(67, 48, 42, 0.17);
+        color: #43302a;
+      }
+
+      .lockup {
+        display: flex;
+        align-items: center;
+        gap: 70px;
+      }
+
+      .mark {
+        flex: none;
+        width: 101px;
+        height: 120px;
+      }
+
+      .wordmark {
+        font-family: 'Fredoka', sans-serif;
+        font-weight: 600;
+        font-size: 120px;
+        line-height: 1;
+        white-space: nowrap;
+      }
+
+      /* The die-cut: a white edge all the way round the art, then a soft shadow */
+      .sticker {
+        flex: none;
+        width: 360px;
+        transform: rotate(3deg);
+        filter: drop-shadow(6px 0 0 #fff) drop-shadow(-6px 0 0 #fff)
+          drop-shadow(0 6px 0 #fff) drop-shadow(0 -6px 0 #fff)
+          drop-shadow(0 12px 14px rgba(67, 48, 42, 0.22));
+      }
+
+      .sticker svg {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="frame">
+      <div class="card">
+        <div class="lockup">
+          <svg class="mark" viewBox="4 2.5 16 19" aria-hidden="true">
+            <mask id="mark">
+              <rect x="0" y="0" width="24" height="24" fill="#fff" />
+              <rect x="10.8" y="5.2" width="2.4" height="9" rx="0.6" fill="#000" />
+              <rect x="8" y="7.8" width="8" height="2.4" rx="0.6" fill="#000" />
+              <rect x="7" y="16.6" width="10.5" height="2.4" rx="1.2" fill="#000" />
+            </mask>
+            <rect x="4" y="2.5" width="16" height="19" rx="3.5" fill="#43302A" mask="url(#mark)" />
+          </svg>
+          <span class="wordmark">Hey Bible</span>
+        </div>
+        <div class="sticker">
+          <svg viewBox="0 0 220 200" aria-hidden="true">
+          <path d="M26 150 C4 88 40 28 110 26 C182 24 216 84 196 150 z" fill="#CFE3EC" />
+          <circle cx="160" cy="68" r="20" fill="#E8C277" stroke="#5B4636" stroke-width="2.6" />
+          <path d="M52 74 a11 11 0 0 1 18 -9 a13 13 0 0 1 24 3 a9 9 0 0 1 2 18 h-40 a8 8 0 0 1 -4 -12z" fill="#FFFFFF" />
+          <path d="M12 152 C60 100 152 98 208 152 C200 184 28 186 12 152z" fill="#9DB08A" stroke="#5B4636" stroke-width="2.6" stroke-linejoin="round" />
+          <g transform="translate(58 84)">
+            <rect x="34" y="54" width="7" height="17" rx="3.5" fill="#5B4636" />
+            <rect x="55" y="54" width="7" height="17" rx="3.5" fill="#5B4636" />
+            <path d="M26 54 a12 12 0 0 1 -2 -22 a13 13 0 0 1 20 -12 a14 14 0 0 1 24 2 a12 12 0 0 1 8 22 a11 11 0 0 1 -12 12 a12 12 0 0 1 -20 2 a12 12 0 0 1 -18 -4 z" fill="#FDF8EE" stroke="#5B4636" stroke-width="2.6" stroke-linejoin="round" />
+            <ellipse cx="63" cy="29" rx="5" ry="3" transform="rotate(-25 63 29)" fill="#D9A98B" stroke="#5B4636" stroke-width="2.2" />
+            <ellipse cx="74" cy="39" rx="10.5" ry="11.5" fill="#EBC4A8" stroke="#5B4636" stroke-width="2.6" />
+            <circle cx="73" cy="27.5" r="5.5" fill="#FDF8EE" stroke="#5B4636" stroke-width="2.2" />
+            <path d="M68 38 q2.2 -2.8 4.4 0" fill="none" stroke="#5B4636" stroke-width="2" stroke-linecap="round" />
+            <path d="M76 38 q2.2 -2.8 4.4 0" fill="none" stroke="#5B4636" stroke-width="2" stroke-linecap="round" />
+            <circle cx="67.5" cy="43" r="2.2" fill="#E39A8A" opacity="0.8" />
+            <circle cx="80.5" cy="43" r="2.2" fill="#E39A8A" opacity="0.8" />
+            <path d="M72 44.5 q2 1.8 4 0" fill="none" stroke="#5B4636" stroke-width="1.8" stroke-linecap="round" />
+          </g>
+          <g transform="translate(18 108) scale(0.62)">
+            <rect x="34" y="54" width="7" height="17" rx="3.5" fill="#5B4636" />
+            <rect x="55" y="54" width="7" height="17" rx="3.5" fill="#5B4636" />
+            <path d="M26 54 a12 12 0 0 1 -2 -22 a13 13 0 0 1 20 -12 a14 14 0 0 1 24 2 a12 12 0 0 1 8 22 a11 11 0 0 1 -12 12 a12 12 0 0 1 -20 2 a12 12 0 0 1 -18 -4 z" fill="#FDF8EE" stroke="#5B4636" stroke-width="3.4" stroke-linejoin="round" />
+            <ellipse cx="74" cy="39" rx="10.5" ry="11.5" fill="#EBC4A8" stroke="#5B4636" stroke-width="3.4" />
+            <path d="M68 38 q2.2 -2.8 4.4 0" fill="none" stroke="#5B4636" stroke-width="2.6" stroke-linecap="round" />
+            <path d="M76 38 q2.2 -2.8 4.4 0" fill="none" stroke="#5B4636" stroke-width="2.6" stroke-linecap="round" />
+          </g>
+        </svg>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
