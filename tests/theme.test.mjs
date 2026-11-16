@@ -91,7 +91,19 @@ const pairs = [
   ["footer titles", "--ifm-footer-title-color", "--ifm-footer-background-color"],
   ["footer links", "--ifm-footer-link-color", "--ifm-footer-background-color"],
   ["footer link hover", "--ifm-footer-link-hover-color", "--ifm-footer-background-color"],
+  ["button labels", "--ifm-color-content-inverse", "--ifm-color-primary"],
+  ["button labels on hover", "--ifm-color-content-inverse", "--ifm-color-primary-dark"],
+  ["API reference secondary text", "--ifm-color-content-secondary", "--sticker-surface-card"],
 ];
+
+// The API reference (Scalar) colours code and HTTP methods with these, on the
+// page and on its cards
+for (const hue of ["green", "red", "yellow", "blue", "orange", "purple"]) {
+  pairs.push(
+    [`API reference ${hue}`, `--sticker-syntax-${hue}`, "--ifm-background-color"],
+    [`API reference ${hue} on a card`, `--sticker-syntax-${hue}`, "--sticker-surface-card"]
+  );
+}
 
 for (const [modeName, mode] of [["day", day], ["night", night]]) {
   for (const [label, text, surface] of pairs) {

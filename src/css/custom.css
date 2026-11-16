@@ -68,6 +68,18 @@
   --sticker-button: var(--sticker-terracotta);
   --sticker-button-contrast: #ffffff;
 
+  /*
+   * Syntax colours for the API reference's code samples and HTTP methods:
+   * Gruvbox Material, like the docs code blocks, darkened where needed to
+   * pass on both the page and the card.
+   */
+  --sticker-syntax-green: #406e52;
+  --sticker-syntax-red: #af2528;
+  --sticker-syntax-yellow: #8f5d0a;
+  --sticker-syntax-blue: #266b79;
+  --sticker-syntax-orange: #a74406;
+  --sticker-syntax-purple: #924f79;
+
   /* Shape */
   --sticker-radius-sm: 14px;
   --sticker-radius-md: 22px;
@@ -104,7 +116,8 @@
   --ifm-background-surface-color: var(--sticker-surface-card);
   --ifm-color-content: var(--sticker-ink);
   --ifm-color-content-secondary: var(--sticker-ink-soft);
-  --ifm-color-content-inverse: var(--sticker-cream);
+  /* Infima's button labels. The same as the pill button's, so text on a primary fill passes. */
+  --ifm-color-content-inverse: var(--sticker-button-contrast);
   --ifm-heading-color: var(--sticker-ink);
   --ifm-hover-overlay: rgba(67, 48, 42, 0.06);
 
@@ -214,6 +227,14 @@ html[data-theme='dark'] {
   --sticker-button: var(--sticker-rose);
   --sticker-button-contrast: var(--sticker-night);
 
+  /* Gruvbox Material at night, lightened where needed to pass on the card */
+  --sticker-syntax-green: #89b482;
+  --sticker-syntax-red: #ee8781;
+  --sticker-syntax-yellow: #d8a657;
+  --sticker-syntax-blue: #7daea3;
+  --sticker-syntax-orange: #e89057;
+  --sticker-syntax-purple: #d792a5;
+
   /* Primary: rose, with the steps mixed the same way as by day */
   --ifm-color-primary: #e8b3a0;
   --ifm-color-primary-dark: #d1a190;
@@ -233,7 +254,7 @@ html[data-theme='dark'] {
   --ifm-background-surface-color: var(--sticker-surface-card);
   --ifm-color-content: var(--sticker-cream);
   --ifm-color-content-secondary: #c9bfae;
-  --ifm-color-content-inverse: var(--sticker-night);
+  --ifm-color-content-inverse: var(--sticker-button-contrast);
   --ifm-heading-color: var(--sticker-wheat);
   --ifm-hover-overlay: rgba(243, 232, 214, 0.07);
 
@@ -312,6 +333,12 @@ html[data-theme]:root .scalar-card.dark-mode {
   --scalar-color-2: var(--ifm-color-content-secondary);
   --scalar-color-3: var(--ifm-color-content-secondary);
   --scalar-color-accent: var(--ifm-link-color);
+  --scalar-color-green: var(--sticker-syntax-green);
+  --scalar-color-red: var(--sticker-syntax-red);
+  --scalar-color-yellow: var(--sticker-syntax-yellow);
+  --scalar-color-blue: var(--sticker-syntax-blue);
+  --scalar-color-orange: var(--sticker-syntax-orange);
+  --scalar-color-purple: var(--sticker-syntax-purple);
   --scalar-button-1: var(--sticker-button);
   --scalar-button-1-hover: var(--ifm-color-primary-dark);
   --scalar-button-1-color: var(--sticker-button-contrast);
