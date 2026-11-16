@@ -1,6 +1,6 @@
-import { themes as prismThemes } from "prism-react-renderer";
 import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
+import { codeThemeDay, codeThemeNight } from "./src/code-themes.mjs";
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -90,18 +90,19 @@ const config: Config = {
       title: "Hey Bible",
       logo: {
         alt: "Hey Bible Logo",
-        src: "img/logo.png",
+        src: "img/logo.svg",
+        srcDark: "img/logo-dark.svg",
       },
       items: [
         {
           href: "https://heybible.app",
           label: "Login",
           position: "right",
+          className: "navbar-login",
         },
       ],
     },
     footer: {
-      style: "dark",
       links: [
         {
           title: "Docs",
@@ -150,14 +151,14 @@ const config: Config = {
       copyright: `Copyright © ${new Date().getFullYear()} Working Dev's Hero LLC. Built with Docusaurus.`,
     },
     prism: {
-      theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
+      theme: codeThemeDay,
+      darkTheme: codeThemeNight,
     },
     zooming: {
       selector: ".markdown img:not(a img)",
       background: {
-        light: "rgba(255, 255, 255, 0.9)",
-        dark: "rgba(0, 0, 0, 0.9)",
+        light: "rgba(243, 232, 214, 0.92)",
+        dark: "rgba(35, 43, 61, 0.92)",
       },
     },
   } satisfies Preset.ThemeConfig,
