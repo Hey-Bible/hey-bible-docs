@@ -195,6 +195,27 @@ test("the social preview image is 1200×630 and has a source", () => {
   assert.ok(existsSync(join(root, "brand/og-image.html")));
 });
 
+test("the share image and the banner show the shepherd with the flock", () => {
+  for (const file of ["brand/og-image.html", "brand/banner.html"]) {
+    const page = read(file);
+    assert.match(page, /clipPath id="shepherd-robe"/, `${file}: no shepherd in the meadow`);
+    // The old meadow had the sun where the shepherd now stands
+    assert.doesNotMatch(page, /circle cx="160" cy="68" r="20"/, `${file}: still the old meadow`);
+    const sprigs = page.match(/class="bit leaf"/g)?.length ?? 0;
+    const stars = (page.match(/class="bit"/g)?.length ?? 0);
+    assert.ok(sprigs >= 2, `${file}: expected a couple of sprigs in the gaps`);
+    assert.ok(stars >= 4, `${file}: expected a few stars in the gaps`);
+    assert.ok(sprigs + stars <= 12, `${file}: the scatter should stay thin`);
+  }
+});
+
+test("the banner is 1500×500", () => {
+  const png = readFileSync(join(root, "docs/img/banner.png"));
+  assert.equal(png.toString("latin1", 1, 4), "PNG");
+  assert.equal(png.readUInt32BE(16), 1500);
+  assert.equal(png.readUInt32BE(20), 500);
+});
+
 // ── Leftovers of the old look ──
 
 test("no colour of the old gold and sky-blue theme is left", () => {
