@@ -532,6 +532,19 @@ html[data-theme='dark'] .alert [class*='admonitionHeading'] {
   color: var(--sticker-alert-tint);
 }
 
+/*
+ * ── Pictures drawn once for each colour mode ──
+ * In Markdown, end the image's address with #light-mode-only or
+ * #dark-mode-only and put the two side by side; only the one for the current
+ * mode shows. The introduction's banner is the shepherd in the meadow by day
+ * and the shepherd leading with a lamp by night.
+ */
+
+html[data-theme='light'] img[src$='#dark-mode-only'],
+html[data-theme='dark'] img[src$='#light-mode-only'] {
+  display: none;
+}
+
 /* ── Footer ── */
 
 .footer__title {
