@@ -196,7 +196,7 @@ test("the social preview image is 1200×630 and has a source", () => {
 });
 
 test("the share image and the banner show the shepherd with the flock", () => {
-  for (const file of ["brand/og-image.html", "brand/banner.html"]) {
+  for (const file of ["brand/og-image.html", "brand/banner.html", "brand/banner-dark.html"]) {
     const page = read(file);
     assert.match(page, /clipPath id="shepherd-robe"/, `${file}: no shepherd in the meadow`);
     // The old meadow had the sun where the shepherd now stands
@@ -214,6 +214,48 @@ test("the banner is 1500×500", () => {
   assert.equal(png.toString("latin1", 1, 4), "PNG");
   assert.equal(png.readUInt32BE(16), 1500);
   assert.equal(png.readUInt32BE(20), 500);
+});
+
+test("dark mode has its own banner: the shepherd leads with a lamp that lights the path", () => {
+  const png = readFileSync(join(root, "docs/img/banner-dark.png"));
+  assert.equal(png.toString("latin1", 1, 4), "PNG");
+  assert.equal(png.readUInt32BE(16), 1500);
+  assert.equal(png.readUInt32BE(20), 500);
+
+  const night = read("brand/banner-dark.html");
+  // A night card in the docs' dark colours, not the day card
+  const dark = css.slice(css.indexOf("html[data-theme='dark'] {"));
+  const card = dark.match(/--sticker-surface-card:\s*(#[0-9a-f]{6})/i)[1];
+  const edge = dark.match(/--sticker-edge:\s*(#[0-9a-f]{6})/i)[1];
+  assert.ok(night.includes(`background: ${card};`), "the card is not the night card colour");
+  assert.ok(night.includes(`border: 9px solid ${edge};`), "the card edge is not the night edge");
+  assert.doesNotMatch(night, /#CFE3EC/i, "the day sky is still in the night banner");
+  assert.doesNotMatch(night, /fill="#43302A"/i, "the mark is still ink on a dark card");
+  // The lamp's light: rings round the flame, and the path drawn bright inside them
+  assert.match(night, /<clipPath id="night-lit">/);
+  assert.match(night, /clip-path="url\(#night-lit\)"/, "nothing is lit by the lamp");
+  // The flock is behind the shepherd: each sheep starts further left than he does
+  const starts = [...night.matchAll(/<g transform="translate\((\d+(?:\.\d+)?) /g)].map((m) => Number(m[1]));
+  const shepherd = Number(night.match(/translate\((\d+(?:\.\d+)?) [\d.]+\) scale\([\d.]+\) rotate/)[1]);
+  const flock = starts.filter((x) => x < shepherd);
+  assert.ok(flock.length >= 2, "the flock should follow behind the shepherd");
+});
+
+test("the introduction shows the day banner in light mode and the night banner in dark mode", () => {
+  const intro = read("docs/index.mdx");
+  assert.match(intro, /!\[Hey Bible Banner\]\(img\/banner\.png#light-mode-only\)/);
+  assert.match(intro, /!\[Hey Bible Banner\]\(img\/banner-dark\.png#dark-mode-only\)/);
+  // Plain Markdown, so the page still reads cleanly in llms-full.txt
+  assert.doesNotMatch(intro, /ThemedImage/);
+
+  // Each mode hides the other mode's picture, and nothing else
+  const rule = css.match(/([^{}]*)\{\s*display:\s*none;\s*\}/g).find((r) => r.includes("-mode-only"));
+  assert.ok(rule, "no rule hides the other mode's picture");
+  const selectors = rule.slice(rule.lastIndexOf("*/") + 2, rule.indexOf("{")).split(",").map((s) => s.trim());
+  assert.deepEqual(selectors.sort(), [
+    "html[data-theme='dark'] img[src$='#light-mode-only']",
+    "html[data-theme='light'] img[src$='#dark-mode-only']",
+  ]);
 });
 
 // ── Leftovers of the old look ──
