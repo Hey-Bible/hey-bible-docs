@@ -1,115 +1,549 @@
 /**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
+ * Hey Bible docs — Storybook Sticker theme.
+ *
+ * The same look as the Hey Bible app: a cream page, brown ink, terracotta for
+ * links and buttons, and cards cut out with a white edge and a soft warm
+ * shadow. Dark mode is the same sticker sheet at night, on a dusky indigo sky.
+ *
+ * A docs site is a reading surface, so it stays calm: colour and type carry
+ * the brand, and nothing decorative sits inside a docs page.
+ *
+ * Everything here overrides Infima, the CSS framework the classic Docusaurus
+ * theme is built on. Colours are declared once as tokens and reused below.
+ * tests/theme.test.mjs checks the contrast of the pairs that carry text.
  */
 
-/* You can override the default Infima variables here. */
+/* ── Self-hosted fonts: Fredoka for headings, Nunito for everything read ── */
+
+@font-face {
+  font-family: 'Fredoka';
+  font-style: normal;
+  font-weight: 300 700;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url('/fonts/fredoka-variable-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 200 1000;
+  font-display: swap;
+  src: url('/fonts/nunito-variable-latin.woff2') format('woff2');
+}
+
+/* ── Day ── */
+
 :root {
-  --ifm-color-primary: #8b6914;
-  --ifm-color-primary-dark: #7d5f12;
-  --ifm-color-primary-darker: #765911;
-  --ifm-color-primary-darkest: #61490e;
-  --ifm-color-primary-light: #997316;
-  --ifm-color-primary-lighter: #a07917;
-  --ifm-color-primary-lightest: #b5891a;
+  /* Palette */
+  --sticker-cream: #f3e8d6;
+  --sticker-ink: #43302a;
+  --sticker-ink-soft: #6b5347;
+  --sticker-night: #232b3d;
+  --sticker-terracotta: #a4573e;
+  --sticker-sage: #9db08a;
+  --sticker-rose: #e8b3a0;
+  --sticker-sky: #bcd9e6;
+  --sticker-wheat: #e8c277;
+
+  /* Surfaces, edges and shadows */
+  --sticker-surface-card: #fbf4e6;
+  --sticker-edge: #ffffff;
+  --sticker-edge-width: 4px;
+  --sticker-divider: rgba(67, 48, 42, 0.14);
+  --sticker-shadow: 0 10px 22px rgba(67, 48, 42, 0.17);
+  --sticker-shadow-sm: 0 4px 10px rgba(67, 48, 42, 0.14);
+
+  /* Pastel tints. Text on a tint is always ink. */
+  --sticker-tint-rose: #f6ddd2;
+  --sticker-tint-wheat: #f5e3bb;
+  --sticker-tint-sage: #dce5d0;
+  --sticker-tint-sky: #cfe3ec;
+
+  /* The current page in the sidebar */
+  --sticker-active: var(--sticker-tint-sage);
+  --sticker-active-contrast: var(--sticker-ink);
+
+  /* The pill button in the navbar */
+  --sticker-button: var(--sticker-terracotta);
+  --sticker-button-contrast: #ffffff;
+
+  /*
+   * Syntax colours for the API reference's code samples and HTTP methods:
+   * Gruvbox Material, like the docs code blocks, darkened where needed to
+   * pass on both the page and the card.
+   */
+  --sticker-syntax-green: #406e52;
+  --sticker-syntax-red: #af2528;
+  --sticker-syntax-yellow: #8f5d0a;
+  --sticker-syntax-blue: #266b79;
+  --sticker-syntax-orange: #a74406;
+  --sticker-syntax-purple: #924f79;
+
+  /* Shape */
+  --sticker-radius-sm: 14px;
+  --sticker-radius-md: 22px;
+  --sticker-radius-pill: 999px;
+
+  /* Type */
+  --sticker-font-heading: 'Fredoka', 'Nunito', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  --sticker-font-body: 'Nunito', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Roboto', sans-serif;
+
+  /*
+   * Primary: terracotta. The darker steps are the base mixed 10%, 15% and 30%
+   * with black, the lighter ones the same amounts with white.
+   */
+  --ifm-color-primary: #a4573e;
+  --ifm-color-primary-dark: #944e38;
+  --ifm-color-primary-darker: #8b4a35;
+  --ifm-color-primary-darkest: #733d2b;
+  --ifm-color-primary-light: #ad6851;
+  --ifm-color-primary-lighter: #b2705b;
+  --ifm-color-primary-lightest: #bf8978;
+  --ifm-color-primary-contrast-background: var(--sticker-tint-rose);
+  --ifm-color-primary-contrast-foreground: var(--sticker-ink);
+
+  /*
+   * Terracotta is made for fills with white text on top. As small text on
+   * cream it falls just short of WCAG AA (4.3:1), so links and other coloured
+   * text use the first darker step (5.1:1).
+   */
+  --ifm-link-color: var(--ifm-color-primary-dark);
+  --ifm-link-hover-color: var(--ifm-color-primary-darkest);
+
+  /* Page, surfaces and text */
+  --ifm-background-color: var(--sticker-cream);
+  --ifm-background-surface-color: var(--sticker-surface-card);
+  --ifm-color-content: var(--sticker-ink);
+  --ifm-color-content-secondary: var(--sticker-ink-soft);
+  /* Infima's button labels. The same as the pill button's, so text on a primary fill passes. */
+  --ifm-color-content-inverse: var(--sticker-button-contrast);
+  --ifm-heading-color: var(--sticker-ink);
+  --ifm-hover-overlay: rgba(67, 48, 42, 0.06);
+
+  /* The neutral scale: cream mixed towards ink in 10% steps, not cool grey */
+  --ifm-color-emphasis-0: #f3e8d6;
+  --ifm-color-emphasis-100: #e1d6c5;
+  --ifm-color-emphasis-200: #d0c3b4;
+  --ifm-color-emphasis-300: #beb1a2;
+  --ifm-color-emphasis-400: #ad9e91;
+  --ifm-color-emphasis-500: #9b8c80;
+  --ifm-color-emphasis-600: #897a6f;
+  --ifm-color-emphasis-700: #78675e;
+  --ifm-color-emphasis-800: #66554c;
+  --ifm-color-emphasis-900: #55423b;
+  --ifm-color-emphasis-1000: #43302a;
+
+  /* Type */
+  --ifm-font-family-base: var(--sticker-font-body);
+  --ifm-heading-font-family: var(--sticker-font-heading);
+  --ifm-heading-font-weight: 600;
+  --ifm-font-weight-semibold: 700;
+  --ifm-font-weight-bold: 800;
+
+  /* Shape and shadow */
+  --ifm-global-radius: var(--sticker-radius-sm);
+  --ifm-button-border-radius: var(--sticker-radius-pill);
+  --ifm-card-border-radius: var(--sticker-radius-md);
+  --ifm-pagination-nav-border-radius: var(--sticker-radius-md);
+  --ifm-global-shadow-lw: var(--sticker-shadow-sm);
+  --ifm-global-shadow-md: var(--sticker-shadow);
+  --ifm-global-shadow-tl: var(--sticker-shadow);
+
+  /* Navbar: the same cream as the page, with a hairline under it */
+  --ifm-navbar-background-color: var(--sticker-cream);
+  --ifm-navbar-link-color: var(--sticker-ink);
+  --ifm-navbar-link-hover-color: var(--ifm-link-color);
+  --ifm-navbar-shadow: 0 1px 0 var(--sticker-divider);
+
+  /* Sidebar and table of contents */
+  --ifm-menu-color: var(--sticker-ink-soft);
+  --ifm-menu-color-active: var(--ifm-link-color);
+  --ifm-toc-border-color: var(--sticker-divider);
+  --ifm-toc-link-color: var(--sticker-ink-soft);
+  --ifm-breadcrumb-color-active: var(--ifm-link-color);
+  --ifm-pagination-nav-color-hover: var(--sticker-edge);
+  --ifm-tabs-color-active: var(--ifm-link-color);
+
+  /* Footer: a band of sage */
+  --ifm-footer-background-color: var(--sticker-tint-sage);
+  --ifm-footer-color: var(--sticker-ink);
+  --ifm-footer-title-color: var(--sticker-ink);
+  --ifm-footer-link-color: var(--sticker-ink-soft);
+  --ifm-footer-link-hover-color: var(--ifm-color-primary-darker);
+
+  /* Inline code and code blocks */
   --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --ifm-code-background: var(--sticker-surface-card);
+  --ifm-code-border-radius: 8px;
+  --ifm-pre-border-radius: var(--sticker-radius-sm);
+  --docusaurus-highlighted-code-line-bg: rgba(67, 48, 42, 0.1);
+
+  /* Tables */
+  --ifm-table-border-color: var(--sticker-divider);
+  --ifm-table-head-background: var(--sticker-tint-sage);
+  --ifm-table-head-color: var(--sticker-ink);
+  --ifm-table-stripe-background: var(--sticker-surface-card);
+
+  /* Rules and quotes */
+  --ifm-hr-background-color: var(--sticker-divider);
+  --ifm-blockquote-border-color: var(--sticker-sage);
+  --ifm-blockquote-color: var(--sticker-ink-soft);
+
+  /* Admonitions: a pastel card with a white edge. See the rules below. */
+  --ifm-alert-border-radius: var(--sticker-radius-md);
+  --ifm-alert-border-width: 3px;
+  --ifm-alert-border-left-width: 3px;
+  --ifm-alert-shadow: var(--sticker-shadow-sm);
+  --sticker-alert-note: var(--sticker-surface-card);
+  --sticker-alert-tip: var(--sticker-tint-sage);
+  --sticker-alert-info: var(--sticker-tint-sky);
+  --sticker-alert-warning: var(--sticker-tint-wheat);
+  --sticker-alert-danger: var(--sticker-tint-rose);
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
-[data-theme='dark'] {
-  --ifm-color-primary: #d4a93a;
-  --ifm-color-primary-dark: #c99b28;
-  --ifm-color-primary-darker: #be9226;
-  --ifm-color-primary-darkest: #9d781f;
-  --ifm-color-primary-light: #dab550;
-  --ifm-color-primary-lighter: #ddb95a;
-  --ifm-color-primary-lightest: #e4c87a;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+/*
+ * ── Night ──
+ * `html[data-theme='dark']` rather than `[data-theme='dark']`: Infima sets its
+ * own dark surfaces with that selector, and this has to match it to win.
+ */
+
+html[data-theme='dark'] {
+  --sticker-surface-card: #2e384e;
+  --sticker-edge: #f3e8d6;
+  --sticker-edge-width: 3px;
+  --sticker-divider: rgba(243, 232, 214, 0.16);
+  --sticker-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  --sticker-shadow-sm: 0 4px 10px rgba(0, 0, 0, 0.3);
+
+  /* The same hues, mid-tone */
+  --sticker-tint-rose: #e8b3a0;
+  --sticker-tint-wheat: #e8c277;
+  --sticker-tint-sage: #b9cba5;
+  --sticker-tint-sky: #bcd9e6;
+
+  --sticker-active: var(--sticker-tint-sage);
+  --sticker-active-contrast: var(--sticker-night);
+  --sticker-button: var(--sticker-rose);
+  --sticker-button-contrast: var(--sticker-night);
+
+  /* Gruvbox Material at night, lightened where needed to pass on the card */
+  --sticker-syntax-green: #89b482;
+  --sticker-syntax-red: #ee8781;
+  --sticker-syntax-yellow: #d8a657;
+  --sticker-syntax-blue: #7daea3;
+  --sticker-syntax-orange: #e89057;
+  --sticker-syntax-purple: #d792a5;
+
+  /* Primary: rose, with the steps mixed the same way as by day */
+  --ifm-color-primary: #e8b3a0;
+  --ifm-color-primary-dark: #d1a190;
+  --ifm-color-primary-darker: #c59888;
+  --ifm-color-primary-darkest: #a27d70;
+  --ifm-color-primary-light: #eabbaa;
+  --ifm-color-primary-lighter: #ebbeae;
+  --ifm-color-primary-lightest: #efcabd;
+  --ifm-color-primary-contrast-background: var(--sticker-surface-card);
+  --ifm-color-primary-contrast-foreground: var(--sticker-cream);
+
+  /* Rose reads well on the night sky as it is */
+  --ifm-link-color: var(--ifm-color-primary);
+  --ifm-link-hover-color: var(--ifm-color-primary-lightest);
+
+  --ifm-background-color: var(--sticker-night);
+  --ifm-background-surface-color: var(--sticker-surface-card);
+  --ifm-color-content: var(--sticker-cream);
+  --ifm-color-content-secondary: #c9bfae;
+  --ifm-color-content-inverse: var(--sticker-button-contrast);
+  --ifm-heading-color: var(--sticker-wheat);
+  --ifm-hover-overlay: rgba(243, 232, 214, 0.07);
+
+  /* The neutral scale: night mixed towards cream in 10% steps */
+  --ifm-color-emphasis-0: #232b3d;
+  --ifm-color-emphasis-100: #383e4c;
+  --ifm-color-emphasis-200: #4d515c;
+  --ifm-color-emphasis-300: #61646b;
+  --ifm-color-emphasis-400: #76777a;
+  --ifm-color-emphasis-500: #8b8a8a;
+  --ifm-color-emphasis-600: #a09c99;
+  --ifm-color-emphasis-700: #b5afa8;
+  --ifm-color-emphasis-800: #c9c2b7;
+  --ifm-color-emphasis-900: #ded5c7;
+  --ifm-color-emphasis-1000: #f3e8d6;
+
+  --ifm-navbar-background-color: var(--sticker-night);
+  --ifm-navbar-link-color: var(--sticker-cream);
+
+  --ifm-menu-color: #c9bfae;
+  --ifm-toc-link-color: #c9bfae;
+  --ifm-toc-border-color: var(--sticker-divider);
+
+  --ifm-footer-background-color: var(--sticker-surface-card);
+  --ifm-footer-color: var(--sticker-cream);
+  --ifm-footer-title-color: var(--sticker-wheat);
+  --ifm-footer-link-color: #c9bfae;
+  --ifm-footer-link-hover-color: var(--sticker-rose);
+
+  --ifm-code-background: var(--sticker-surface-card);
+  --docusaurus-highlighted-code-line-bg: rgba(243, 232, 214, 0.12);
+
+  --ifm-table-head-background: transparent;
+  --ifm-table-head-color: var(--sticker-wheat);
+  --ifm-table-stripe-background: rgba(46, 56, 78, 0.6);
+
+  --ifm-blockquote-border-color: var(--sticker-tint-sage);
+  --ifm-blockquote-color: #c9bfae;
+
+  /*
+   * At night an admonition is a night card with a tinted edge and heading.
+   * A full pastel fill would be the brightest thing on a page meant for reading.
+   */
+  --ifm-alert-border-width: 2px;
+  --ifm-alert-border-left-width: 2px;
+  --sticker-alert-note: #c9bfae;
+  --sticker-alert-tip: var(--sticker-tint-sage);
+  --sticker-alert-info: var(--sticker-tint-sky);
+  --sticker-alert-warning: var(--sticker-tint-wheat);
+  --sticker-alert-danger: var(--sticker-tint-rose);
 }
 
-/* Light mode header - matches hey-bible-web */
-.navbar {
-  --ifm-navbar-background-color: rgba(127, 205, 235, 0.3);
-  --ifm-navbar-link-color: #1a2833;
-  backdrop-filter: blur(10px);
+/* ── Page ground ── */
+
+/*
+ * The API reference (Scalar) adds a `body` background of its own on every
+ * page, in a cascade layer, which would paint the page white. An unlayered
+ * rule wins over it.
+ */
+body {
+  background-color: var(--ifm-background-color);
+}
+
+/*
+ * Scalar's own surfaces, for the API reference at /api. The plugin sets them
+ * on `html[data-theme='…'] body` and again on its request cards; `:root` lifts
+ * these above both, whatever order the two stylesheets are bundled in.
+ */
+html[data-theme]:root body,
+html[data-theme]:root .scalar-card.dark-mode {
+  --scalar-background-1: var(--ifm-background-color);
+  --scalar-background-2: var(--sticker-surface-card);
+  --scalar-background-3: var(--ifm-color-emphasis-100);
+  --scalar-background-accent: var(--ifm-hover-overlay);
+  --scalar-border-color: var(--sticker-divider);
+  --scalar-color-2: var(--ifm-color-content-secondary);
+  --scalar-color-3: var(--ifm-color-content-secondary);
+  --scalar-color-accent: var(--ifm-link-color);
+  --scalar-color-green: var(--sticker-syntax-green);
+  --scalar-color-red: var(--sticker-syntax-red);
+  --scalar-color-yellow: var(--sticker-syntax-yellow);
+  --scalar-color-blue: var(--sticker-syntax-blue);
+  --scalar-color-orange: var(--sticker-syntax-orange);
+  --scalar-color-purple: var(--sticker-syntax-purple);
+  --scalar-button-1: var(--sticker-button);
+  --scalar-button-1-hover: var(--ifm-color-primary-dark);
+  --scalar-button-1-color: var(--sticker-button-contrast);
+}
+
+/* ── Type ── */
+
+::selection {
+  background: var(--sticker-tint-rose);
+  color: var(--sticker-ink);
+}
+
+/* Links in running text are bold, as in the app, so colour is not the only cue */
+.markdown a:not(.hash-link) {
+  font-weight: 700;
+}
+
+/* ── Navbar: the logo lockup, then one pill button ── */
+
+/* The mark is as tall as the wordmark's type, as in the app's lockup */
+.navbar__logo {
+  height: 1.75rem;
+  margin-right: 0.85rem;
 }
 
 .navbar__title {
-  color: #1a2833;
+  font-family: var(--sticker-font-heading);
+  font-weight: 600;
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.navbar__brand:hover {
+  color: var(--ifm-navbar-link-color);
 }
 
 .navbar__link {
-  color: #1a2833;
+  font-weight: 700;
 }
 
-/* Dark mode header - restore default */
-[data-theme='dark'] .navbar {
-  --ifm-navbar-background-color: #242526;
-  --ifm-navbar-link-color: #fff;
-  backdrop-filter: none;
+.navbar__item.navbar-login {
+  margin-right: 0.5rem;
+  padding: 0.3rem 1rem;
+  border: 3px solid var(--sticker-edge);
+  border-radius: var(--sticker-radius-pill);
+  background: var(--sticker-button);
+  box-shadow: var(--sticker-shadow-sm);
+  color: var(--sticker-button-contrast);
+  font-weight: 800;
+  line-height: 1.4;
 }
 
-[data-theme='dark'] .navbar__title {
-  color: #fff;
+.navbar__item.navbar-login:hover {
+  background: var(--ifm-color-primary-dark);
+  color: var(--sticker-button-contrast);
+  text-decoration: none;
 }
 
-[data-theme='dark'] .navbar__link {
-  color: #fff;
-}
-
-/* Light mode footer - matches hey-bible-web */
-.footer--dark {
-  --ifm-footer-background-color: rgba(127, 205, 235, 0.3);
-  --ifm-footer-color: #1a2833;
-  --ifm-footer-link-color: #1a2833;
-  --ifm-footer-title-color: #1a2833;
-  backdrop-filter: blur(10px);
-}
-
-.footer--dark .footer__link-item {
-  color: #1a2833;
-}
-
-.footer--dark .footer__link-item:hover {
-  color: #1a2833;
-}
-
-.footer--dark .footer__copyright {
-  color: #1a2833;
-}
-
-.footer--dark .footer__title {
-  color: #1a2833;
-}
-
-/* Dark mode footer - matches header */
-[data-theme='dark'] .footer--dark {
-  --ifm-footer-background-color: var(--ifm-navbar-background-color);
-  --ifm-footer-color: var(--ifm-navbar-link-color);
-  --ifm-footer-link-color: var(--ifm-navbar-link-color);
-  --ifm-footer-title-color: var(--ifm-navbar-link-color);
-  backdrop-filter: none;
-}
-
-[data-theme='dark'] .footer--dark .footer__link-item {
-  color: var(--ifm-navbar-link-color);
-}
-
-[data-theme='dark'] .footer--dark .footer__link-item:hover {
-  color: var(--ifm-navbar-link-hover-color);
-}
-
-[data-theme='dark'] .footer--dark .footer__copyright {
-  color: var(--ifm-navbar-link-color);
-}
-
-[data-theme='dark'] .footer--dark .footer__title {
-  color: var(--ifm-navbar-link-color);
-}
-
-/* Hide Scalar navbar item */
-.navbar__item[href="/api"] {
+/* Scalar adds an empty navbar item for the API reference; the sidebar links to it */
+.navbar__item[href='/api'] {
   display: none;
+}
+
+/* ── Sidebar ── */
+
+.menu__link {
+  border-radius: var(--sticker-radius-pill);
+  font-weight: 700;
+}
+
+.menu__list-item-collapsible,
+.menu__caret {
+  border-radius: var(--sticker-radius-pill);
+}
+
+/* The current page is a sage pill with ink on it */
+.menu__link--active:not(.menu__link--sublist) {
+  background: var(--sticker-active);
+  color: var(--sticker-active-contrast);
+  font-weight: 800;
+}
+
+/* ── Table of contents and breadcrumbs ── */
+
+.table-of-contents__link:hover,
+.table-of-contents__link:hover code,
+.table-of-contents__link--active,
+.table-of-contents__link--active code {
+  color: var(--ifm-link-color);
+}
+
+.table-of-contents__link--active {
+  font-weight: 800;
+}
+
+.breadcrumbs__link {
+  font-weight: 700;
+}
+
+/* "On this page" on small screens: a quiet card, not the sidebar's sage pill */
+.theme-doc-toc-mobile.theme-doc-toc-mobile {
+  border: 1px solid var(--sticker-divider);
+  border-radius: var(--sticker-radius-sm);
+  background-color: var(--sticker-surface-card);
+}
+
+/* ── Previous / next: the one place a docs page shows sticker cards ── */
+
+.pagination-nav__link {
+  border: var(--sticker-edge-width) solid var(--sticker-edge);
+  background: var(--sticker-surface-card);
+  box-shadow: var(--sticker-shadow-sm);
+  transition: box-shadow 0.2s ease;
+}
+
+.pagination-nav__link:hover {
+  box-shadow: var(--sticker-shadow);
+  text-decoration: none;
+}
+
+.pagination-nav__sublabel {
+  color: var(--ifm-color-content-secondary);
+  font-weight: 700;
+}
+
+.pagination-nav__label {
+  font-family: var(--sticker-font-heading);
+  font-weight: 600;
+}
+
+/* ── Code ── */
+
+code {
+  border-color: var(--sticker-divider);
+}
+
+/*
+ * A hairline, not a shadow: code is the quietest block on the page. The class
+ * is doubled to outrank the theme's own code block styles.
+ */
+.theme-code-block.theme-code-block {
+  border: 1px solid var(--sticker-divider);
+  border-radius: var(--sticker-radius-sm);
+  box-shadow: none;
+}
+
+/* ── Tables ── */
+
+table thead tr {
+  border-bottom: 2px solid var(--sticker-divider);
+}
+
+/* ── Admonitions ── */
+
+.alert {
+  --ifm-alert-background-color: var(--sticker-alert-tint);
+  --ifm-alert-background-color-highlight: rgba(67, 48, 42, 0.08);
+  --ifm-alert-foreground-color: var(--sticker-ink);
+  --ifm-alert-border-color: var(--sticker-edge);
+}
+
+.alert--secondary {
+  --sticker-alert-tint: var(--sticker-alert-note);
+}
+
+.alert--success {
+  --sticker-alert-tint: var(--sticker-alert-tip);
+}
+
+.alert--primary,
+.alert--info {
+  --sticker-alert-tint: var(--sticker-alert-info);
+}
+
+.alert--warning {
+  --sticker-alert-tint: var(--sticker-alert-warning);
+}
+
+.alert--danger {
+  --sticker-alert-tint: var(--sticker-alert-danger);
+}
+
+html[data-theme='dark'] .alert {
+  --ifm-alert-background-color: var(--sticker-surface-card);
+  --ifm-alert-background-color-highlight: rgba(243, 232, 214, 0.1);
+  --ifm-alert-foreground-color: var(--sticker-cream);
+  --ifm-alert-border-color: var(--sticker-alert-tint);
+}
+
+html[data-theme='dark'] .alert [class*='admonitionHeading'] {
+  color: var(--sticker-alert-tint);
+}
+
+/* ── Footer ── */
+
+.footer__title {
+  font-family: var(--sticker-font-heading);
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.footer__link-item {
+  font-weight: 700;
+}
+
+.footer__copyright {
+  color: var(--ifm-footer-link-color);
 }
