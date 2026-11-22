@@ -1,6 +1,6 @@
 // Checks on the Storybook Sticker theme: that text keeps a readable contrast
-// in both colour modes, that the brand assets are in place, and that nothing
-// of the old gold and sky-blue look is left behind.
+// in both colour modes, that the brand assets and the app screenshots are in
+// place, and that nothing of the old gold and sky-blue look is left behind.
 //
 // Run with `npm test`.
 import assert from "node:assert/strict";
@@ -8,6 +8,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
+import { inflateSync } from "node:zlib";
 
 import { codeThemeDay, codeThemeNight } from "../src/code-themes.mjs";
 
@@ -256,6 +257,64 @@ test("the introduction shows the day banner in light mode and the night banner i
     "html[data-theme='dark'] img[src$='#light-mode-only']",
     "html[data-theme='light'] img[src$='#dark-mode-only']",
   ]);
+});
+
+// ── App screenshots on the introduction ──
+
+const screenshots = ["1-login", "2-search", "3-favorites", "4-verse", "5-images", "6-image"];
+
+/** The [r, g, b] of the pixel in the middle of a PNG's top row. */
+function topMiddlePixel(png) {
+  const width = png.readUInt32BE(16);
+  assert.equal(png[24], 8, "expected 8 bits per channel");
+  const channels = { 2: 3, 6: 4 }[png[25]];
+  assert.ok(channels, "expected an RGB or RGBA picture");
+  assert.equal(png[28], 0, "expected a picture that is not interlaced");
+  // The pixels are the IDAT chunks joined and inflated; each chunk is length, name, data, checksum
+  const data = [];
+  for (let at = 8; at < png.length; at += png.readUInt32BE(at) + 12)
+    if (png.toString("latin1", at + 4, at + 8) === "IDAT")
+      data.push(png.subarray(at + 8, at + 8 + png.readUInt32BE(at)));
+  const row = inflateSync(Buffer.concat(data)).subarray(0, 1 + width * channels);
+  // Undo the row's filter. Nothing is above the top row, so only the pixel to the left counts.
+  const filter = row[0];
+  const line = row.subarray(1);
+  for (let i = channels; i < line.length; i++) {
+    const left = line[i - channels];
+    if (filter === 1 || filter === 4) line[i] = (line[i] + left) & 255;
+    else if (filter === 3) line[i] = (line[i] + (left >> 1)) & 255;
+  }
+  const middle = Math.floor(width / 2) * channels;
+  return [...line.subarray(middle, middle + 3)];
+}
+
+test("the introduction shows six phone screenshots of the app, each 1284×2778", () => {
+  const intro = read("docs/index.mdx");
+  for (const name of screenshots) {
+    const path = `docs/img/screenshots/${name}.png`;
+    assert.ok(existsSync(join(root, path)), `${path} is missing`);
+    const png = readFileSync(join(root, path));
+    assert.equal(png.toString("latin1", 1, 4), "PNG", `${path} is not a PNG`);
+    // 428×926 points on a phone that draws three pixels to the point
+    assert.equal(png.readUInt32BE(16), 1284, `${path}: width`);
+    assert.equal(png.readUInt32BE(20), 2778, `${path}: height`);
+    assert.ok(
+      intro.includes(`require('./img/screenshots/${name}.png')`),
+      `the introduction does not show ${name}.png`,
+    );
+  }
+  // Every picture the introduction asks for is one of the six, and the folder holds nothing else
+  const shown = [...intro.matchAll(/img\/screenshots\/([\w-]+)\.png/g)].map((m) => m[1]);
+  assert.deepEqual(shown, screenshots);
+  assert.deepEqual(readdirSync(join(root, "docs/img/screenshots")).sort(), screenshots.map((n) => `${n}.png`));
+});
+
+test("the screenshots show the app's warm parchment, not the old sky blue", () => {
+  for (const name of screenshots) {
+    const [r, g, b] = topMiddlePixel(readFileSync(join(root, `docs/img/screenshots/${name}.png`)));
+    // The app's page is parchment (about #F3E8D6); the old one was a pale blue (#E8F6FA)
+    assert.ok(r > g && g > b && r - b >= 15, `${name}.png: the top of the screen is rgb(${r}, ${g}, ${b})`);
+  }
 });
 
 // ── Leftovers of the old look ──
