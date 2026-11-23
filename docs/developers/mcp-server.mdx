@@ -7,7 +7,7 @@ description: Use the @hey-bible/mcp server to access your Hey Bible data from AI
 
 # MCP Server
 
-The Hey Bible MCP server lets AI assistants like Claude Desktop look up Scripture and access your Hey Bible data — verses, favorites, notes, images, chats, and tags — directly from your conversations.
+The Hey Bible MCP server lets AI assistants like Claude Desktop look up Scripture and access your Hey Bible data — verses, favorites, notes, images, chats, and tags — directly from your conversations. It can also make a new verse picture with the `generate_image` tool, which spends your account's credits.
 
 [![npm version](https://img.shields.io/npm/v/@hey-bible/mcp.svg)](https://www.npmjs.com/package/@hey-bible/mcp)
 
@@ -43,6 +43,15 @@ Add the following to your Claude Desktop configuration file:
 ```
 
 Then restart Claude Desktop. You should see Hey Bible listed in the connectors menu.
+
+## Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `HEY_BIBLE_API_KEY` | Required. Your API key, from Account > API Keys in Hey Bible. |
+| `HEY_BIBLE_API_URL` | Optional. Override the API base URL (default: `https://api.heybible.app`), for example to run against a local stack. The [CLI](./cli.mdx) reads the same variable. |
+
+To use a different API, add `HEY_BIBLE_API_URL` next to the key in the `env` block of your configuration.
 
 ## Available Tools
 
@@ -96,6 +105,52 @@ Retrieve AI-generated images associated with your verses.
 | `limit` | `number` | Optional. Number of images to return (1-100) |
 | `offset` | `number` | Optional. Number of images to skip for pagination |
 
+### generate_image
+
+Draw a new picture for a verse and save it to your account, the same way the app does.
+
+:::warning This tool spends credits
+Each call takes credits from your Hey Bible account. The cost depends on the image model. Claude Desktop and many other MCP clients ask you before running a tool, so you can approve or decline each picture. If drawing fails after the credits are taken, they are refunded.
+:::
+
+Name the verse with `verse_id`, or with `book` and `chapter`.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `verse_id` | `number` | Optional. ID of a verse already saved to your account. When set, the book, chapter, verse and translation fields are ignored. |
+| `book` | `string` | Book name (e.g. "Isaiah"). Required with `chapter` when `verse_id` is not set. |
+| `chapter` | `number` | Chapter number. Required with `book` when `verse_id` is not set. |
+| `start_verse` | `number` | Optional. First verse of the passage |
+| `end_verse` | `number` | Optional. Last verse of the passage (defaults to `start_verse`) |
+| `bible_id` | `string` | Optional. Translation ID. Use `get_bibles` to list them. |
+| `theme` | `string` | Optional. `hey_bible` (default), `animals`, `celestial`, `custom`, `fantasy`, `flowers`, `landscape`, `literal`, `medieval`, `minimalist`, `stained_glass` or `watercolor` |
+| `theme_content` | `string` | What to draw. Required when `theme` is `custom`. |
+| `size` | `string` | Optional. `portrait` (9:16), `square` (1:1, default) or `landscape` (16:9) |
+| `model` | `string` | Optional. Image model ID. Models cost different numbers of credits. |
+| `quote` | `string` | Optional. Text printed on the picture (defaults to the verse text). At most 40 words for square and 70 for portrait or landscape. |
+| `source` | `string` | Optional. Citation printed under the quote (defaults to the verse reference) |
+| `copyright` | `string` | Optional. Copyright line. Ignored when the translation has its own. |
+
+The tool returns the new image's id, a link to the image that works for 24 hours, and the credits it cost:
+
+```json
+{
+  "image_id": 1234,
+  "signed_url": "https://...",
+  "credits_charged": 4,
+  "image": {
+    "id": 1234,
+    "quote": "But those who wait for Yahweh will renew their strength. They will mount up with wings like eagles. They will run, and not be weary. They will walk, and not faint.",
+    "source": "Isaiah 40:31 (WEB)",
+    "size": "square"
+  }
+}
+```
+
+If `signed_url` is `null`, the picture was still made and saved. Fetch it with `get_images` and the id instead of generating it again.
+
+If the API turns the request down, the tool returns an error with the API's message. A 400 means the input was wrong (for example a custom theme with no `theme_content`), and no credits were spent. A 402 means your account does not have enough credits for the chosen model.
+
 ### get_chats
 
 Retrieve your chat conversations with verse context. If `id` is provided, returns a single chat with its messages.
@@ -118,6 +173,8 @@ Once configured, you can ask Claude things like:
 - "Read me Psalm 23 in the KJV"
 - "Show me my favorite verses tagged 'faith'"
 - "What notes have I written recently?"
+- "Make me a picture of Isaiah 40:31 in the WEB"
+- "Make a watercolor landscape picture of Psalm 23:1 in the KJV"
 
 ## Troubleshooting
 
@@ -131,6 +188,7 @@ Once configured, you can ask Claude things like:
 
 1. Check that your API key is valid and not expired
 2. Verify you have saved verses/notes/images in your Hey Bible account
+3. If `generate_image` says the account is out of credits, add credits in the Hey Bible app and try again
 
 ### View server logs
 
